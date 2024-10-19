@@ -3,5 +3,4 @@ const Contact = () => {
         <h3>Contact page</h3>
     )
 }
-
 export default Contact;
