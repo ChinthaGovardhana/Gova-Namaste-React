@@ -15,18 +15,22 @@ const Body = () => {
   }, []);
   const fetchData = async () => {
     const data = await fetch(
-      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9352403&lng=77.624532&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.624532&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
     );
+    // https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9352403&lng=77.624532&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING
     const json = await data.json();
+    console.log(json);
     setListOfRestaurents(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
     setFilteredRestaurent(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
-    console.log(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    const groupedCardData = await fetch(
+      "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9352403&lng=77.624532&restaurantId=671928&catalog_qa=undefined&query=Biryani&submitAction=ENTER"
     );
+    const groupedCardJsonData = await groupedCardData.json();
+    console.log(groupedCardJsonData);
     console.log(listOfRestaurents);
   };
 
@@ -36,17 +40,18 @@ const Body = () => {
     <Shimmer />
   ) : (
     <div className="body">
-      <div className="filter">
-        <div className="search">
+      <div className="filter flex">
+        <div className="search m-4 p-4">
           <input
             type="text"
-            className="search-box"
+            className="border border-solid border-black"
             value={searchedText}
             onChange={(e) => {
               setSearchedText(e.target.value);
             }}
           />
           <button
+            className="px-4 py-2 bg-green-100 m-4 rounded-lg"
             onClick={() => {
               filteredRestaurents = listOfRestaurents.filter((res) =>
                 res.info.name.toLowerCase().includes(searchedText.toLowerCase())
@@ -57,19 +62,21 @@ const Body = () => {
             Search
           </button>
         </div>
-        <button
-          className="filter-btn"
-          onClick={() => {
-            filteredRestaurents = listOfRestaurents.filter(
-              (res) => res.info.avgRating > 4
-            );
-            setListOfRestaurents(filteredRestaurents);
-          }}
-        >
-          Top Rated Restaurents
-        </button>
+        <div className="search m-4 p-4 flex items-center">
+          <button
+            className="px-4 py-2 bg-gray-100 rounded-lg"
+            onClick={() => {
+              filteredRestaurents = listOfRestaurents.filter(
+                (res) => res.info.avgRating > 4
+              );
+              setListOfRestaurents(filteredRestaurents);
+            }}
+          >
+            Top Rated Restaurents
+          </button>
+        </div>
       </div>
-      <div className="res-container">
+      <div className="flex flex-wrap">
         {filteredRestaurent.map((restaurent) => (
           <Link
             to={"/restaurent/" + restaurent?.info?.id}
