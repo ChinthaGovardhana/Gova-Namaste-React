@@ -1,2 +1,1 @@
-#Namaste React
-ChinthaGovardhana
+# Gova-Namaste-React
