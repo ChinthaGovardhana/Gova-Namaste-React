@@ -7,7 +7,6 @@ const Header = () => {
   const [btnName, setBtnName] = useState("Login");
   const onlineStatus = useOnlineStatus();
   const cartItems = useSelector((store) => store.cart.items);
-
   return (
     <div className="flex justify-between bg-pink-50 shadow">
       <div className="logoContainer">
